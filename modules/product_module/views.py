@@ -4,17 +4,22 @@ from .models import Product
 from .forms import ProductForm
 from .permissions import has_permission
 
-def product_landing(request):
-    role = request.GET.get('role', 'public')
-    products = Product.objects.all()
+def get_user_role(request):
+    """ Helper function untuk mendapatkan role user. """
+    return getattr(request.user, 'role', 'public')
 
+def product_landing(request):
+    role = get_user_role(request)
+    products = Product.objects.all()
+    
     return render(request, 'product_module/product_landing.html', {
         'role': role,
         'products': products
     })
 
 def product_create(request):
-    if not has_permission(request.GET.get('role', 'public'), 'create'):
+    role = get_user_role(request)
+    if not has_permission(role, 'create'):
         messages.error(request, "Permission denied.")
         return redirect('product_module:product_landing')
 
@@ -30,14 +35,16 @@ def product_create(request):
     return render(request, 'product_module/product_form.html', {'form': form})
 
 def product_delete(request, pk):
-    if not has_permission(request.GET.get('role', 'public'), 'delete'):
+    role = get_user_role(request)
+    if not has_permission(role, 'delete'):
         messages.error(request, "Permission denied.")
         return redirect('product_module:product_landing')
 
     product = get_object_or_404(Product, pk=pk)
 
     if request.method == "POST":
-        if request.POST.get('confirm') == 'yes':
+        confirm = request.POST.get('confirm')
+        if confirm == 'yes':
             product.delete()
             messages.success(request, "Product deleted successfully!")
         else:
