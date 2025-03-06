@@ -10,6 +10,10 @@ class ModuleListView(View):
 
     def get(self, request, *args, **kwargs):
         module_dir = os.path.join(settings.BASE_DIR, 'modules')
+
+        if not os.path.exists(module_dir):
+            os.makedirs(module_dir)
+
         modules = [name for name in os.listdir(module_dir) if os.path.isdir(os.path.join(module_dir, name))]
         installed_modules = list(InstalledModule.objects.values_list('name', flat=True))
 
