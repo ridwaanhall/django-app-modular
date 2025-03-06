@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Product Module</title>
+</head>
+<body>
+    <h1>Product List</h1>
+
+    {% if role in 'manager,user' %}
+        <a href="{% url 'product_module:product_create' %}">Add Product</a>
+    {% endif %}
+
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Barcode</th>
+            <th>Price</th>
+            <th>Stock</th>
+            {% if role in 'manager,user' %}
+                <th>Actions</th>
+            {% endif %}
+        </tr>
+        {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.barcode }}</td>
+                <td>{{ product.price }}</td>
+                <td>{{ product.stock }}</td>
+                {% if role in 'manager,user' %}
+                    <td>
+                        <a href="{% url 'product_module:product_update' product.pk %}">Edit</a>
+                        {% if role == 'manager' %}
+                            <form action="{% url 'product_module:product_delete' product.pk %}" method="POST" onsubmit="return confirmDelete();">
+                                {% csrf_token %}
+                                <button type="submit">Delete</button>
+                            </form>
+                        {% endif %}
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </table>
+
+    <script>
+        function confirmDelete() {
+            return confirm('Are you sure to delete this data?');
+        }
+    </script>
+</body>
+</html>
