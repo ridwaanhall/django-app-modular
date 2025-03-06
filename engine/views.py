@@ -24,13 +24,15 @@ class ModuleListView(View):
 
     def post(self, request, *args, **kwargs):
         action = request.POST.get('action')
-        module_name = action.split('_')[1] if action else None
+        module_name = '_'.join(action.split('_')[1:]) if action else None
 
         if not module_name:
             messages.error(request, "Invalid action!")
             return redirect('engine:module_list')
 
         module_path = os.path.join(settings.BASE_DIR, 'modules', module_name)
+
+        print(f"Checking module path: {module_path}")
 
         if not os.path.exists(module_path):
             messages.error(request, f"Module {module_name} not found!")
