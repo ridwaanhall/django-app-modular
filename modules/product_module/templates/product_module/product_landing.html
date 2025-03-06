@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Product Module</title>
+</head>
+<body>
+    <h1>Product List</h1>
+    {% if role == 'manager' or role == 'user' %}
+        <a href="{% url 'product_module:product_create' %}">Add Product</a>
+    {% endif %}
+
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Barcode</th>
+            <th>Price</th>
+            <th>Stock</th>
+            {% if role == 'manager' or role == 'user' %}
+                <th>Actions</th>
+            {% endif %}
+        </tr>
+        {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.barcode }}</td>
+                <td>{{ product.price }}</td>
+                <td>{{ product.stock }}</td>
+                {% if role == 'manager' or role == 'user' %}
+                    <td>
+                        {% if role == 'manager' %}
+                            <a href="{% url 'product_module:product_update' product.pk %}">Edit</a>
+                            <form action="{% url 'product_module:product_delete' product.pk %}" method="POST" style="display:inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="confirm" value="no">
+                                <button type="submit" onclick="return confirm('Are you sure to delete this data?') ? this.form.confirm.value='yes' : false;">Delete</button>
+                            </form>
+                        {% elif role == 'user' %}
+                            <a href="{% url 'product_module:product_update' product.pk %}">Edit</a>
+                        {% endif %}
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </table>
+
+    {% if action == 'create' or action == 'update' %}
+        <h2>{{ 'Add' if action == 'create' else 'Edit' }} Product</h2>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Save</button>
+        </form>
+    {% elif action == 'delete' %}
+        <h2>Delete Product</h2>
+        <p>Are you sure to delete this data?</p>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="confirm" value="yes">
+            <button type="submit">Yes</button>
+            <a href="{% url 'product_module:product_list' %}">No</a>
+        </form>
+    {% endif %}
+
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+</body>
+</html>
