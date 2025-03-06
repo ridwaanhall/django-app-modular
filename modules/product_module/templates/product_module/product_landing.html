@@ -29,10 +29,10 @@
                     <td>
                         {% if role == 'manager' %}
                             <a href="{% url 'product_module:product_update' product.pk %}">Edit</a>
-                            <form action="{% url 'product_module:product_delete' product.pk %}" method="POST" style="display:inline;">
+                            <form action="{% url 'product_module:product_delete' product.pk %}" method="POST" style="display:inline;" onsubmit="return handleDelete(this);">
                                 {% csrf_token %}
                                 <input type="hidden" name="confirm" id="confirm_{{ product.pk }}" value="no">
-                                <button type="submit" onclick="if (confirm('Are you sure to delete this data?')) { document.getElementById('confirm_{{ product.pk }}').value = 'yes'; return true; } else { return false; }">Delete</button>
+                                <button type="submit">Delete</button>
                             </form>
                         {% elif role == 'user' %}
                             <a href="{% url 'product_module:product_update' product.pk %}">Edit</a>
@@ -66,5 +66,16 @@
             <p>{{ message }}</p>
         {% endfor %}
     {% endif %}
+
+    <script>
+    function handleDelete(form) {
+        if (confirm('Are you sure to delete this data?')) {
+            document.getElementById('confirm_' + {{ product.pk }}).value = 'yes';
+            return true;
+        } else {
+            return false;
+        }
+    }
+    </script>
 </body>
 </html>
