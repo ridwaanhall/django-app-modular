@@ -16,8 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from engine.models import InstalledModule
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('engine.urls')),
 ]
+
+for module in InstalledModule.objects.values_list('name', flat=True):
+    urlpatterns.append(path(f'{module}/', include(f'modules.{module}.urls')))

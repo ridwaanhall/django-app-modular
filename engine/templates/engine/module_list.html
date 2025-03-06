@@ -1,27 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Module Manager</title>
+    <title>Module Management</title>
 </head>
 <body>
     <h1>Module List</h1>
-    <ul>
+    <p>Note: Please restart the server after installing or uninstalling a module.</p>
+
+    <table border="1">
+        <tr>
+            <th>Module Name</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
         {% for module in modules %}
-            <li>{{ module }} 
-                {% if module in installed_modules %}
-                    (Installed)
+            <tr>
+                <td>{{ module }}</td>
+                <td>
+                    {% if module in installed_modules %}
+                        Installed
+                    {% else %}
+                        Not Installed
+                    {% endif %}
+                </td>
+                <td>
                     <form method="post" style="display:inline;">
                         {% csrf_token %}
-                        <button type="submit" name="action" value="uninstall_{{ module }}">Uninstall</button>
+                        {% if module in installed_modules %}
+                            <button type="submit" name="action" value="uninstall_{{ module }}">Uninstall</button>
+                            <button type="submit" name="action" value="upgrade_{{ module }}">Upgrade</button>
+                        {% else %}
+                            <button type="submit" name="action" value="install_{{ module }}">Install</button>
+                        {% endif %}
                     </form>
-                {% else %}
-                    <form method="post" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit" name="action" value="install_{{ module }}">Install</button>
-                    </form>
-                {% endif %}
-            </li>
+                </td>
+            </tr>
         {% endfor %}
-    </ul>
+    </table>
 </body>
 </html>

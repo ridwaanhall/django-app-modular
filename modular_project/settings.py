@@ -10,7 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
 from pathlib import Path
+from django.apps import apps
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,6 +42,20 @@ INSTALLED_APPS = [
     
     'engine',
 ]
+
+MODULES_DIR = os.path.join(BASE_DIR, 'modules')
+
+if os.path.exists(MODULES_DIR):
+    def get_installed_modules():
+        if not apps.ready:
+            return []
+        try:
+            from engine.models import InstalledModule
+            return list(InstalledModule.objects.values_list('name', flat=True))
+        except:
+            return []
+
+    INSTALLED_APPS += [f'modules.{module}' for module in get_installed_modules()]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

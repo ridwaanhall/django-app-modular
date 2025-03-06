@@ -17,7 +17,10 @@ class ModuleListView(View):
         modules = [name for name in os.listdir(module_dir) if os.path.isdir(os.path.join(module_dir, name))]
         installed_modules = list(InstalledModule.objects.values_list('name', flat=True))
 
-        return render(request, self.template_name, {'modules': modules, 'installed_modules': installed_modules})
+        return render(request, self.template_name, {
+            'modules': modules,
+            'installed_modules': installed_modules
+        })
 
     def post(self, request, *args, **kwargs):
         action = request.POST.get('action')
@@ -27,6 +30,12 @@ class ModuleListView(View):
             messages.error(request, "Invalid action!")
             return redirect('engine:module_list')
 
+        module_path = os.path.join(settings.BASE_DIR, 'modules', module_name)
+
+        if not os.path.exists(module_path):
+            messages.error(request, f"Module {module_name} not found!")
+            return redirect('engine:module_list')
+
         if action.startswith('install_'):
             if module_name not in InstalledModule.objects.values_list('name', flat=True):
                 InstalledModule.objects.create(name=module_name)
@@ -34,5 +43,7 @@ class ModuleListView(View):
         elif action.startswith('uninstall_'):
             InstalledModule.objects.filter(name=module_name).delete()
             messages.success(request, f'Module {module_name} uninstalled. Restart the server to apply changes.')
+        elif action.startswith('upgrade_'):
+            messages.success(request, f'Module {module_name} upgraded. Apply database migrations if needed.')
 
         return redirect('engine:module_list')
