@@ -44,7 +44,7 @@
     </table>
 
     {% if action == 'create' or action == 'update' %}
-        <h2>{{ 'Add' if action == 'create' else 'Edit' }} Product</h2>
+        <h2>{% if action == 'create' %}Add{% else %}Edit{% endif %} Product</h2>
         <form method="POST">
             {% csrf_token %}
             {{ form.as_p }}
