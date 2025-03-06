@@ -24,4 +24,5 @@ urlpatterns = [
 ]
 
 for module in InstalledModule.objects.values_list('name', flat=True):
+    print(f"Adding module: {module}")
     urlpatterns.append(path(f'{module}/', include(f'modules.{module}.urls')))

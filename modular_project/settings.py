@@ -51,11 +51,17 @@ if os.path.exists(MODULES_DIR):
             return []
         try:
             from engine.models import InstalledModule
+            print(InstalledModule.objects.values_list('name', flat=True))
             return list(InstalledModule.objects.values_list('name', flat=True))
         except:
             return []
 
-    INSTALLED_APPS += [f'modules.{module}' for module in get_installed_modules()]
+    if apps.ready:
+        INSTALLED_APPS += [f'modules.{module}' for module in get_installed_modules()]
+
+INSTALLED_APPS += [
+    'modules.product_module',
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
