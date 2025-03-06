@@ -71,11 +71,8 @@ class ProductDeleteView(RoleRequiredMixin, DeleteView):
     required_roles = ['manager']
 
     def post(self, request, *args, **kwargs):
-        if request.POST.get('confirm') == 'yes':
-            messages.success(request, 'Product deleted successfully!')
-            return super().post(request, *args, **kwargs)
-        messages.info(request, 'Delete cancelled.')
-        return redirect('product_module:product_list')
+        messages.success(request, 'Product deleted successfully!')
+        return super().post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
