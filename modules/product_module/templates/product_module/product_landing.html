@@ -31,8 +31,8 @@
                             <a href="{% url 'product_module:product_update' product.pk %}">Edit</a>
                             <form action="{% url 'product_module:product_delete' product.pk %}" method="POST" style="display:inline;">
                                 {% csrf_token %}
-                                <input type="hidden" name="confirm" value="no">
-                                <button type="submit" onclick="return confirm('Are you sure to delete this data?') ? this.form.confirm.value='yes' : false;">Delete</button>
+                                <input type="hidden" name="confirm" id="confirm_{{ product.pk }}" value="no">
+                                <button type="submit" onclick="if (confirm('Are you sure to delete this data?')) { document.getElementById('confirm_{{ product.pk }}').value = 'yes'; return true; } else { return false; }">Delete</button>
                             </form>
                         {% elif role == 'user' %}
                             <a href="{% url 'product_module:product_update' product.pk %}">Edit</a>
