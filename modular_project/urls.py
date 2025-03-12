@@ -21,3 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('modular_engine.urls')),
 ]
+
+urlpatterns += [
+    path('example/', include('example_module.urls')),
+]

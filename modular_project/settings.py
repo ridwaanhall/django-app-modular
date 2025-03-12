@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     'modular_engine',
+    'example_module',
 ]
 
 MIDDLEWARE = [
