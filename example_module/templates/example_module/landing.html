@@ -1,58 +1,55 @@
-{% extends 'base.html' %}
-
-{% block content %}
-<h2>Daftar Produk</h2>
-
-{% if user.is_authenticated %}
-    <p>Halo, {{ user.username }}! Anda masuk sebagai <strong>
-        {% if user.groups.all %}
-            {{ user.groups.all.0.name }}
-        {% else %}
-            Pengguna tanpa grup
-        {% endif %}
-    </strong></p>
-{% else %}
-    <p>Halo, Pengunjung! Anda hanya bisa melihat produk.</p>
-{% endif %}
-
-<table border="1">
-    <thead>
-        <tr>
-            <th>Nama</th>
-            <th>Barcode</th>
-            <th>Harga</th>
-            <th>Stok</th>
-            {% if user.is_authenticated and user.has_perm("example_module.change_product") or user.has_perm("example_module.delete_product") %}
-                <th>Aksi</th>
-            {% endif %}
-        </tr>
-    </thead>
-    <tbody>
-        {% for product in products %}
-        <tr>
-            <td>{{ product.name }}</td>
-            <td>{{ product.barcode }}</td>
-            <td>{{ product.price }}</td>
-            <td>{{ product.stock }}</td>
-            {% if user.is_authenticated %}
-                <td>
-                    {% if user.has_perm("example_module.change_product") %}
-                        <a href="{% url 'edit_product' product.id %}">Edit</a>
-                    {% endif %}
-                    {% if user.has_perm("example_module.delete_product") %}
-                        <a href="{% url 'delete_product' product.id %}" onclick="return confirm('Are you sure to delete this data?');">
-                            Hapus
-                        </a>
-                    {% endif %}
-                </td>
-            {% endif %}
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-{% if user.is_authenticated and user.has_perm("example_module.add_product") %}
-    <a href="{% url 'add_product' %}">Tambah Produk</a>
-{% endif %}
-
+{% extends 'base.html' %} 
+{% block content %} 
+<h2>Daftar Produk</h2> 
+{% if user.is_authenticated %} 
+<p>Halo, {{ user.username }}! Anda masuk sebagai <strong> 
+    {% if user.groups.all %} 
+        {{ user.groups.all.0.name }} 
+    {% else %} 
+        Pengguna tanpa grup 
+    {% endif %} 
+    </strong>
+</p> 
+{% else %} 
+<p>Halo, Pengunjung! Anda hanya bisa melihat produk.</p> 
+{% endif %} 
+<table border="1"> 
+    <thead> 
+        <tr> 
+            <th>Nama</th> 
+            <th>Barcode</th> 
+            <th>Harga</th> 
+            <th>Stok</th> 
+            {% if user.is_authenticated and user.has_perm("example_module.change_product") or user.has_perm("example_module.delete_product") %} 
+            <th>Aksi</th> 
+            {% endif %} 
+        </tr> 
+    </thead> 
+    <tbody> 
+        {% for product in products %} 
+        <tr> 
+            <td>{{ product.name }}</td> 
+            <td>{{ product.barcode }}</td> 
+            <td>{{ product.price }}</td> 
+            <td>{{ product.stock }}</td> 
+            {% if user.is_authenticated and user.has_perm("example_module.change_product") or user.has_perm("example_module.delete_product") %} 
+            <td> 
+                {% if user.has_perm("example_module.change_product") %} 
+                <a href="{% url 'edit_product' product.id %}">Edit</a> 
+                {% endif %} 
+                {% if user.has_perm("example_module.delete_product") %} 
+                <form action="{% url 'delete_product' product.id %}" method="POST" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" onclick="return confirm('Are you sure to delete this data?');">Hapus</button>
+                </form>
+                {% endif %} 
+            </td> 
+            {% endif %} 
+        </tr> 
+        {% endfor %} 
+    </tbody> 
+</table> 
+{% if user.is_authenticated and user.has_perm("example_module.add_product") %} 
+<a href="{% url 'add_product' %}">Tambah Produk</a> 
+{% endif %} 
 {% endblock %}

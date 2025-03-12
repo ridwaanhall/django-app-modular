@@ -21,7 +21,6 @@ def add_product(request):
             return redirect('landing_page')
     else:
         form = ProductForm()
-
     return render(request, 'example_module/product_form.html', {'form': form})
 
 @login_required
@@ -29,7 +28,6 @@ def add_product(request):
 def edit_product(request, product_id):
     """Hanya User & Manager yang bisa mengedit produk"""
     product = get_object_or_404(Product, id=product_id)
-    
     if request.method == "POST":
         form = ProductForm(request.POST, instance=product)
         if form.is_valid():
@@ -38,7 +36,6 @@ def edit_product(request, product_id):
             return redirect('landing_page')
     else:
         form = ProductForm(instance=product)
-
     return render(request, 'example_module/product_form.html', {'form': form})
 
 @login_required
@@ -46,10 +43,8 @@ def edit_product(request, product_id):
 def delete_product(request, product_id):
     """Hanya Manager yang bisa menghapus produk"""
     product = get_object_or_404(Product, id=product_id)
-
     if request.method == "POST":
         product.delete()
         messages.success(request, "Produk berhasil dihapus.")
         return redirect('landing_page')
-
     return render(request, 'example_module/confirm_delete.html', {'product': product})
