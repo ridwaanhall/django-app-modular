@@ -3,6 +3,9 @@ from django.shortcuts import redirect, render
 from django.contrib import messages
 
 def login_page(request):
+    if request.user.is_authenticated:
+        return redirect('product_module:product_list')
+
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
