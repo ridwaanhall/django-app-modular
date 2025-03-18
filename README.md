@@ -46,3 +46,110 @@ django_modular_project/
 
 manager_user : Project123
 normal_user  : Project123
+
+---
+
+## Django Modular System - Panduan Penggunaan
+
+### Deskripsi Proyek
+
+Project ini adalah sistem Django yang memungkinkan modul diinstal, diupgrade, dan dilepas secara dinamis. Terdiri dari dua komponen utama:
+
+1. **Module Engine** (module_engine) - Sistem untuk manajemen modul
+2. **Product Module** (product_module) - Contoh modul yang dapat diinstal/uninstal
+
+### Struktur Modul
+
+- **Module Engine** mengelola siklus hidup modul dengan tindakan install, upgrade, dan uninstall
+- **Product Module** menyediakan fitur manajemen produk dengan kontrol akses berbasis role
+
+### Fungsionalitas Utama
+
+#### Module Engine
+
+- Menyediakan halaman untuk mengelola modul (install, upgrade, uninstall)
+- Menyimpan status modul di database
+- Mengatur akses ke fitur modul berdasarkan status instalasi
+
+#### Product Module
+
+- Menyediakan modul contoh dengan fitur CRUD untuk produk
+- Mengimplementasikan 3 role dengan kontrol akses:
+  - **Manager**: Akses penuh (CRUD)
+  - **User**: Create, Read, Update
+  - **Public**: Read only
+- Menyediakan konfirmasi dengan popup sebelum menghapus data
+
+### Cara Penggunaan
+
+#### Setup Awal
+
+1. Clone repository atau ekstrak file zip
+2. Buat dan aktifkan virtual environment:
+   ```
+   python -m venv venv
+   source venv/bin/activate  ## Di Windows: venv\Scripts\activate
+   ```
+3. Install dependensi:
+   ```
+   pip install django
+   ```
+4. Jalankan migrasi:
+   ```
+   python manage.py makemigrations
+   python manage.py migrate
+   ```
+5. Buat superuser:
+   ```
+   python manage.py createsuperuser
+   ```
+6. Jalankan server:
+   ```
+   python manage.py runserver
+   ```
+
+#### Menggunakan Modul Engine
+
+1. Akses `http://localhost:8000/module/` untuk melihat daftar modul
+2. Klik tombol "Install" untuk menginstal modul Product
+3. Setelah diinstal, modul akan muncul sebagai "Active"
+4. Jika ada perubahan pada struktur database, klik "Upgrade" untuk menerapkan perubahan
+5. Untuk menonaktifkan modul, klik "Uninstall"
+
+#### Menggunakan Product Module
+
+1. Setelah module "product_module" diinstal, akses `http://localhost:8000/product/`
+2. Pengguna dengan role berbeda akan melihat UI yang berbeda:
+   - Manager dapat melakukan semua operasi (Create, Read, Update, Delete)
+   - User dapat membuat, melihat, dan memperbarui produk
+   - Public hanya dapat melihat produk
+
+#### Mengatur Role Pengguna
+
+1. Login ke admin panel di `http://localhost:8000/admin/`
+2. Buat pengguna baru atau gunakan yang sudah ada
+3. Buat entri di model UserRole untuk menghubungkan pengguna dengan role yang diinginkan
+
+### Pengembangan Modul Baru
+
+Untuk membuat modul baru, ikuti pola dari product_module:
+
+1. Buat aplikasi Django baru dengan `python manage.py startapp nama_modul`
+2. Buat model yang diperlukan di `models.py`
+3. Implementasikan file `installer.py` dengan fungsi `install()`, `upgrade()`, dan `uninstall()`
+4. Tambahkan decorator `@module_installed_required` ke semua view
+5. Daftarkan modul di Module Engine dengan menambahkan entri di `signals.py`
+
+### Menangani Perubahan Struktur Database
+
+Untuk menangani perubahan struktur database (misalnya menambah field baru):
+
+1. Tambahkan field baru di model
+2. Buat migrasi dengan `python manage.py makemigrations nama_modul`
+3. Gunakan fitur "Upgrade" di halaman module untuk menerapkan migrasi
+
+### Perhatian Penting
+
+- Uninstall modul tidak menghapus tabel di database, hanya menonaktifkan akses ke modul
+- Pastikan bahwa semua modul mendaftar di Module Engine melalui signals
+- Gunakan decorator `@module_installed_required` untuk memastikan akses hanya ketika modul diinstal
