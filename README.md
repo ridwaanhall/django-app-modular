@@ -44,8 +44,10 @@ django_modular_project/
 
 ## Role User
 
-manager_user : Project123
-normal_user  : Project123
+| Username | Role    | Password  |
+|----------|---------|-----------|
+| admin    | Manager | admin     |
+| user     | User    | Project123|
 
 ---
 
