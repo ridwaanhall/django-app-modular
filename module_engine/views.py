@@ -69,6 +69,7 @@ def upgrade_module(request, module_name):
         
         # Run migrations for the module to handle DB changes
         try:
+            # subprocess.run(['python', 'manage.py', 'makemigrations', module_name], check=True)
             subprocess.run(['python', 'manage.py', 'migrate', module_name], check=True)
         except subprocess.CalledProcessError:
             messages.error(request, f"Failed to run migrations for {module_name}.")
