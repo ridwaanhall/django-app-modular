@@ -32,6 +32,7 @@ if DEBUG:
 else:
     ALLOWED_HOSTS = [
         '.vercel.app',
+        '.ridwaanhall.me',
     ]
 
 
