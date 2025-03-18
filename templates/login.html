@@ -25,15 +25,6 @@ Login
                         </div>
                         <button type="submit" class="btn btn-primary">Login</button>
                     </form>
-                    {% if messages %}
-                    <div class="mt-3">
-                        {% for message in messages %}
-                        <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
-                            {{ message }}
-                        </div>
-                        {% endfor %}
-                    </div>
-                    {% endif %}
                 </div>
             </div>
         </div>
