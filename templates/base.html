@@ -16,9 +16,11 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'module_engine:module_list' %}">Modules</a>
-                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'module_engine:module_list' %}">Modules</a>
+                        </li>
+                    {% endif %}
                     {% is_module_installed 'product_module' as product_module_installed %}
                     {% if product_module_installed %}
                     <li class="nav-item">
@@ -33,9 +35,9 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             {% if user.is_authenticated %}
-                            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
                             {% else %}
-                            <li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
+                                <li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
                             {% endif %}
                         </ul>
                     </li>
