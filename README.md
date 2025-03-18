@@ -38,3 +38,8 @@ django_modular_project/
     ├── urls.py
     └── views.py
 ```
+
+## Role User
+
+manager_user : Project123
+normal_user  : Project123
