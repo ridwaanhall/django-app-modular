@@ -21,6 +21,7 @@ from . import views
 
 urlpatterns = [
     path('login/', views.login_page, name='login'),
+    path('accounts/login/', RedirectView.as_view(url='/login/'), name='login-redirect'),
     path('logout/', views.logout_page, name='logout'),
     path('admin/', admin.site.urls),
     

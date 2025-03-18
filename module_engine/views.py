@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
 from django.conf import settings
@@ -8,10 +9,12 @@ import os
 import subprocess
 from .models import ModuleRegistry
 
+@login_required
 def module_list(request):
     modules = ModuleRegistry.objects.all()
     return render(request, 'module_engine/module_list.html', {'modules': modules})
 
+@login_required
 def install_module(request, module_name):
     try:
         # Get the module registry entry
@@ -54,6 +57,7 @@ def install_module(request, module_name):
     
     return redirect('module_engine:module_list')
 
+@login_required
 def upgrade_module(request, module_name):
     try:
         # Get the module registry entry
@@ -94,6 +98,7 @@ def upgrade_module(request, module_name):
     
     return redirect('module_engine:module_list')
 
+@login_required
 def uninstall_module(request, module_name):
     try:
         # Get the module registry entry
