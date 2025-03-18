@@ -17,9 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
+from . import views
 
 urlpatterns = [
+    path('login/', views.login_page, name='login'),
+    path('logout/', views.logout_page, name='logout'),
     path('admin/', admin.site.urls),
+    
     path('module/', include('module_engine.urls')),
     path('product/', include('product_module.urls')),
     path('', RedirectView.as_view(url='/module/'), name='home'),
