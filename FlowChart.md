@@ -2,7 +2,7 @@
 # Flowchart
 
 1. Module Management Flow:
-   
+
    Start
    |
    v
@@ -12,7 +12,7 @@
    [Tampilkan daftar module yang tersedia]
    |
    v
-   <Pilih aksi>
+   [Pilih aksi]
    |
    +---------------+---------------+
    |               |               |
@@ -36,7 +36,7 @@
    End
 
 2. Role-based Access Flow:
-   
+
    Start
    |
    v
@@ -59,7 +59,7 @@
    End
 
 3. Delete Confirmation Flow:
-   
+
    Start
    |
    v
@@ -69,7 +69,7 @@
    [Tampilkan popup konfirmasi]
    |
    v
-   <User memilih>
+   [User memilih]
    |
    +---------------+
    |               |

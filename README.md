@@ -49,7 +49,60 @@ django_modular_project/
 | admin    | Manager | admin     |
 | user     | User    | Project123|
 
----
+## Flowchart
+
+1. Module Management Flow:
+
+   ```mermaid
+   graph TD;
+      Start-->A[Akses halaman module management];
+      A-->B[Tampilkan daftar module yang tersedia];
+      B-->C{Pilih aksi};
+      C-->D[Install];
+      C-->E[Upgrade];
+      C-->F[Uninstall];
+      D-->G[Jalankan installer];
+      E-->H[Jalankan upgrader];
+      F-->I[Jalankan uninstaller];
+      G-->J[Update registry];
+      H-->J[Update registry];
+      I-->J[Update registry];
+      J-->K[Refresh halaman module management];
+      K-->End;
+   ```
+
+2. Role-based Access Flow:
+
+   ```mermaid
+   graph TD;
+      Start-->A[User mengakses halaman produk];
+      A-->B[Cek role dari user];
+      B-->C[Manager];
+      B-->D[User];
+      B-->E[Public];
+      C-->F[Akses CRUD];
+      D-->G[Akses CRU];
+      E-->H[Akses R];
+      F-->End;
+      G-->End;
+      H-->End;
+   ```
+
+3. Delete Confirmation Flow:
+
+   ```mermaid
+   graph TD;
+      Start-->A[User memilih delete produk];
+      A-->B[Tampilkan popup konfirmasi];
+      B-->C{User memilih};
+      C-->D[Ya];
+      C-->E[Tidak];
+      D-->F[Delete data];
+      E-->G[Cancel operasi];
+      F-->H[Refresh halaman daftar produk];
+      G-->H[Refresh halaman daftar produk];
+      H-->End;
+   ```
 
 ## Django Modular System - Panduan Penggunaan
 
@@ -88,31 +141,40 @@ Project ini adalah sistem Django yang memungkinkan modul diinstal, diupgrade, da
 
 1. Clone repository atau ekstrak file zip
 2. Buat dan aktifkan virtual environment:
-   ```
-   python -m venv venv
+
+   ```bash
+   python -m venv venv # atau virtualenv venv
    source venv/bin/activate  ## Di Windows: venv\Scripts\activate
    ```
+
 3. Install dependensi:
+
+   ```bash
+   pip install -r requirements.txt
    ```
-   pip install django
-   ```
+
 4. Jalankan migrasi:
-   ```
+
+   ```bash
    python manage.py makemigrations
    python manage.py migrate
    ```
+
 5. Buat superuser:
-   ```
+
+   ```bash
    python manage.py createsuperuser
    ```
+
 6. Jalankan server:
-   ```
+
+   ```bash
    python manage.py runserver
    ```
 
 #### Menggunakan Modul Engine
 
-1. Akses `http://localhost:8000/module/` untuk melihat daftar modul
+1. Akses `http://127.0.0.1:8000/module/` untuk melihat daftar modul
 2. Klik tombol "Install" untuk menginstal modul Product
 3. Setelah diinstal, modul akan muncul sebagai "Active"
 4. Jika ada perubahan pada struktur database, klik "Upgrade" untuk menerapkan perubahan
@@ -120,7 +182,7 @@ Project ini adalah sistem Django yang memungkinkan modul diinstal, diupgrade, da
 
 #### Menggunakan Product Module
 
-1. Setelah module "product_module" diinstal, akses `http://localhost:8000/product/`
+1. Setelah module "product_module" diinstal, akses `http://127.0.0.1:8000/product/`
 2. Pengguna dengan role berbeda akan melihat UI yang berbeda:
    - Manager dapat melakukan semua operasi (Create, Read, Update, Delete)
    - User dapat membuat, melihat, dan memperbarui produk
@@ -128,7 +190,7 @@ Project ini adalah sistem Django yang memungkinkan modul diinstal, diupgrade, da
 
 #### Mengatur Role Pengguna
 
-1. Login ke admin panel di `http://localhost:8000/admin/`
+1. Login ke admin panel di `http://127.0.0.1:8000/admin/`
 2. Buat pengguna baru atau gunakan yang sudah ada
 3. Buat entri di model UserRole untuk menghubungkan pengguna dengan role yang diinginkan
 
