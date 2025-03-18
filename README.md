@@ -51,7 +51,7 @@ django_modular_project/
 
 ## how to use
 
-1. login by access [this url](https://django-app-modular.vercel.app/admin/)
+1. login by access [this url](https://django-app-modular.vercel.app/login/)
 2. enter username and password [reference](#role-user)
 3. check [module](https://django-app-modular.vercel.app/) is installed or not
 4. check [product](https://django-app-modular.vercel.app/product/) to check as public/user/admin
