@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Product Detail</h1>
+    
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Barcode:</strong> {{ product.barcode }}</li>
+                <li class="list-group-item"><strong>Price:</strong> {{ product.price }}</li>
+                <li class="list-group-item"><strong>Stock:</strong> {{ product.stock }}</li>
+                <li class="list-group-item"><strong>Created:</strong> {{ product.created_at }}</li>
+                <li class="list-group-item"><strong>Last Updated:</strong> {{ product.updated_at }}</li>
+            </ul>
+        </div>
+        <div class="card-footer">
+            <a href="{% url 'product_module:product_list' %}" class="btn btn-secondary">Back to List</a>
+            
+            {% if user_role in 'manager,user' %}
+            <a href="{% url 'product_module:product_update' product.pk %}" class="btn btn-warning">Edit</a>
+            {% endif %}
+            
+            {% if user_role == 'manager' %}
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                Delete
+            </button>
+            
+            <!-- Delete Confirmation Modal -->
+            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure to delete this data?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <form action="{% url 'product_module:product_delete' product.pk %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
