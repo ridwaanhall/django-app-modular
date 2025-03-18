@@ -197,7 +197,7 @@ Project ini adalah sistem Django yang memungkinkan modul diinstal, diupgrade, da
 
 #### Mengatur Role Pengguna
 
-1. Login ke admin panel di `http://127.0.0.1:8000/admin/`
+1. Login ke admin panel di `http://127.0.0.1:8000/login/`
 2. Buat pengguna baru atau gunakan yang sudah ada
 3. Buat entri di model UserRole untuk menghubungkan pengguna dengan role yang diinginkan
 
