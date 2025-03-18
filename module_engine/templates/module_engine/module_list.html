@@ -1,57 +1,59 @@
 {% extends "base.html" %}
 
 {% block title %}
-Module List
+Modules
 {% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1>Module Management</h1>
-    
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Version</th>
-                <th>Status</th>
-                <th>Install Date</th>
-                <th>Last Updated</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for module in modules %}
-            <tr>
-                <td>{{ module.name }}</td>
-                <td>{{ module.version }}</td>
-                <td>
-                    {% if module.installed %}
-                        {% if module.enabled %}
-                            <span class="badge bg-success">Active</span>
+<div class="container mt-5">
+    <h1 class="mb-4">Module Management</h1>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Version</th>
+                    <th>Status</th>
+                    <th>Install Date</th>
+                    <th>Last Updated</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for module in modules %}
+                <tr>
+                    <td>{{ module.name }}</td>
+                    <td>{{ module.version }}</td>
+                    <td>
+                        {% if module.installed %}
+                            {% if module.enabled %}
+                                <span class="badge bg-success">Active</span>
+                            {% else %}
+                                <span class="badge bg-warning">Disabled</span>
+                            {% endif %}
                         {% else %}
-                            <span class="badge bg-warning">Disabled</span>
+                            <span class="badge bg-secondary">Not Installed</span>
                         {% endif %}
-                    {% else %}
-                        <span class="badge bg-secondary">Not Installed</span>
-                    {% endif %}
-                </td>
-                <td>{{ module.install_date|default:"-" }}</td>
-                <td>{{ module.update_date|default:"-" }}</td>
-                <td>
-                    {% if not module.installed %}
-                        <a href="{% url 'module_engine:install_module' module.name %}" class="btn btn-primary btn-sm">Install</a>
-                    {% else %}
-                        <a href="{% url 'module_engine:upgrade_module' module.name %}" class="btn btn-info btn-sm">Upgrade</a>
-                        <a href="{% url 'module_engine:uninstall_module' module.name %}" class="btn btn-danger btn-sm">Uninstall</a>
-                    {% endif %}
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="6">No modules available.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                    </td>
+                    <td>{{ module.install_date|default:"-" }}</td>
+                    <td>{{ module.update_date|default:"-" }}</td>
+                    <td class="text-center">
+                        {% if not module.installed %}
+                            <a href="{% url 'module_engine:install_module' module.name %}" class="btn btn-primary btn-sm">Install</a>
+                        {% else %}
+                            <a href="{% url 'module_engine:upgrade_module' module.name %}" class="btn btn-info btn-sm">Upgrade</a>
+                            <a href="{% url 'module_engine:uninstall_module' module.name %}" class="btn btn-danger btn-sm">Uninstall</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6">No modules available.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}
