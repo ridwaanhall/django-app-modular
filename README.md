@@ -21,6 +21,9 @@ django_modular_project/
 │   │   └── module_engine/
 │   │       ├── module_list.html
 │   │       └── module_detail.html
+|   ├── templatetags/
+│   │   ├── __init__.html
+│   │   └── module_tags.html
 │   ├── urls.py
 │   └── views.py
 └── product_module/
