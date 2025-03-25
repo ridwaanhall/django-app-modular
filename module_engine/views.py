@@ -2,10 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
-from django.conf import settings
-from django.urls import reverse
 import importlib
-import os
 import subprocess
 from .models import ModuleRegistry
 
@@ -17,21 +14,19 @@ def module_list(request):
 @login_required
 def install_module(request, module_name):
     try:
-        # Get the module registry entry
         module = ModuleRegistry.objects.get(name=module_name)
         
         if module.installed:
             messages.warning(request, f"Module {module_name} is already installed.")
             return redirect('module_engine:module_list')
         
-        # Run migrations for the module
         try:
+            # subprocess.run(['python', 'manage.py', 'makemigrations', module_name], check=True)
             subprocess.run(['python', 'manage.py', 'migrate', module_name], check=True)
         except subprocess.CalledProcessError:
             messages.error(request, f"Failed to run migrations for {module_name}.")
             return redirect('module_engine:module_list')
         
-        # Get the module installer
         try:
             module_app = importlib.import_module(f"{module_name}.installer")
             installer = getattr(module_app, 'install', None)
@@ -39,7 +34,6 @@ def install_module(request, module_name):
             if installer and callable(installer):
                 installer()
         except (ImportError, AttributeError):
-            # If no installer found, we continue since migrations might be enough
             pass
         
         # Update module status
@@ -60,14 +54,12 @@ def install_module(request, module_name):
 @login_required
 def upgrade_module(request, module_name):
     try:
-        # Get the module registry entry
         module = ModuleRegistry.objects.get(name=module_name)
         
         if not module.installed:
             messages.warning(request, f"Module {module_name} is not installed.")
             return redirect('module_engine:module_list')
         
-        # Run migrations for the module to handle DB changes
         try:
             # subprocess.run(['python', 'manage.py', 'makemigrations', module_name], check=True)
             subprocess.run(['python', 'manage.py', 'migrate', module_name], check=True)
@@ -75,7 +67,6 @@ def upgrade_module(request, module_name):
             messages.error(request, f"Failed to run migrations for {module_name}.")
             return redirect('module_engine:module_list')
         
-        # Get the module upgrader
         try:
             module_app = importlib.import_module(f"{module_name}.installer")
             upgrader = getattr(module_app, 'upgrade', None)
@@ -83,12 +74,9 @@ def upgrade_module(request, module_name):
             if upgrader and callable(upgrader):
                 upgrader()
         except (ImportError, AttributeError):
-            # If no upgrader found, we continue since migrations might be enough
             pass
         
-        # Update module version and timestamp
         module.update_date = timezone.now()
-        # You might want to update version here if you track it
         module.save()
         
         messages.success(request, f"Module {module_name} upgraded successfully.")
@@ -102,14 +90,12 @@ def upgrade_module(request, module_name):
 @login_required
 def uninstall_module(request, module_name):
     try:
-        # Get the module registry entry
         module = ModuleRegistry.objects.get(name=module_name)
         
         if not module.installed:
             messages.warning(request, f"Module {module_name} is not installed.")
             return redirect('module_engine:module_list')
         
-        # Get the module uninstaller
         try:
             module_app = importlib.import_module(f"{module_name}.installer")
             uninstaller = getattr(module_app, 'uninstall', None)
@@ -120,7 +106,6 @@ def uninstall_module(request, module_name):
             # If no uninstaller found, we continue
             pass
         
-        # Update module status
         module.installed = False
         module.enabled = False
         module.save()
