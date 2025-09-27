@@ -46,15 +46,15 @@ django_modular_project/
 
 | Username | Role    | Password  |
 |----------|---------|-----------|
-| admin    | Manager | admin     |
-| user     | User    | Project123|
+| admin    | Manager | - |
+| user     | User    | - |
 
 ## how to use
 
-1. login by access [this url](https://django-app-modular.vercel.app/login/)
+1. login by access [this url](http://127.0.0.1:8000/login/)
 2. enter username and password [reference](#role-user)
-3. check [module](https://django-app-modular.vercel.app/) is installed or not
-4. check [product](https://django-app-modular.vercel.app/product/) to check as public/user/admin
+3. check [module](http://127.0.0.1:8000/) is installed or not
+4. check [product](http://127.0.0.1:8000/product/) to check as public/user/admin
 
 ## Flowchart
 
